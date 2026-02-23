@@ -25,6 +25,20 @@ booksRouter.post("/addbook", async (req, res) => {
     }catch(err) {
         res.status(500).json({ error: err.message });
     }
+});
 
+booksRouter.delete("/deletebook/:id", async (req, res) => {
+
+    const id = req.params.id;
+
+    const book = await db.get("SELECT * FROM books WHERE id=?", id);
+
+    if (!book) {
+        return res.status(500).json("No book with id: " + id);
+    }
+
+    await db.get("DELETE FROM books WHERE id=?", id);
+
+    return res.sendStatus(200);
 
 })
